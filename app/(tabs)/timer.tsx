@@ -1,67 +1,93 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+// import React, { useState, useEffect, useRef } from 'react';
+// import { View, Text, Button } from 'react-native';
 
-const MillisecondTimer: React.FC = () => {
-    const [time, setTime] = useState<number>(0); // 타이머 시간 저장
-    const [isRunning, setIsRunning] = useState<boolean>(false); // 타이머 실행 상태
-    const startTimeRef = useRef<number>(0); // 타이머 시작 시간
-    const rafRef = useRef<number | null>(null); //requestAnimationFrame ID
+// interface TimerProps {
+//   initialTime?: number;
+// }
 
-    const startTimer = () => {
-        if (!isRunning) { // 실행 안 하고 있다면
-            setIsRunning(true);
-            startTimeRef.current = performance.now() - time; // 기준 시간
-            const updateTimer = () => {
-                const elapsed = performance.now() - startTimeRef.current; // 지금 - 기준 시간 = 지나간 시간
-                setTime(elapsed);
-                rafRef.current = requestAnimationFrame(updateTimer);
-            }
-            updateTimer();
-        }
-    }
+// const Timer: React.FC<TimerProps> = ({ initialTime = 5.00 }) => {
+//   const [timeLeft, setTimeLeft] = useState<number>(initialTime);
+//   const [isRunning, setIsRunning] = useState<boolean>(false);
+//   const startTimeRef = useRef<number>(0);
+//   const pausedTimeRef = useRef<number>(0);
+//   const frameRef = useRef<number>();
 
-    const stopTimer = () => {
-        if (isRunning) {
-            setIsRunning(false);
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
-        }
-    }
+//   useEffect(() => {
+//     if (isRunning && timeLeft > 0) {
+//       startTimeRef.current = performance.now() - ((initialTime - timeLeft) * 1000);
+      
+//       const updateTimer = (): void => {
+//         const currentTime = performance.now();
+//         const elapsed = (currentTime - startTimeRef.current) / 1000;
+//         const newTime = Math.max(initialTime - elapsed, 0);
+        
+//         if (newTime <= 0) {
+//           setTimeLeft(0);
+//           setIsRunning(false);
+//           return;
+//         }
+        
+//         setTimeLeft(newTime);
+//         frameRef.current = requestAnimationFrame(updateTimer);
+//       };
 
-    const resetTimer = () => {
-        setIsRunning(false);
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
-        setTime(0);
-    }
+//       frameRef.current = requestAnimationFrame(updateTimer);
+      
+//       return () => {
+//         if (frameRef.current) {
+//           cancelAnimationFrame(frameRef.current);
+//         }
+//       };
+//     }
+//   }, [isRunning, initialTime, timeLeft]);
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.time}>{(time*0.001).toFixed(2)} ms</Text>
-            <View style={styles.buttons}>
-                <Button title="start" onPress={startTimer} disabled={isRunning}/>
-                <Button title="stop" onPress={stopTimer} disabled={!isRunning}/>
-                <Button title="restart" onPress={resetTimer}/>
-            </View>
-        </View>
-    );
-}
+//   const startTimer = (): void => {
+//     if (!isRunning) {
+//       if (pausedTimeRef.current > 0) {
+//         startTimeRef.current = performance.now() - ((initialTime - timeLeft) * 1000);
+//       }
+//       setIsRunning(true);
+//     }
+//   };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f5f5f5',
-    },
-    time: {
-        fontSize: 48,
-        marginBottom: 20,
-    },
-    buttons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: 300,
-    },
-});
+//   const stopTimer = (): void => {
+//     setIsRunning(false);
+//     if (frameRef.current) {
+//       cancelAnimationFrame(frameRef.current);
+//       pausedTimeRef.current = performance.now();
+//     }
+//   };
 
+//   const resetTimer = (): void => {
+//     stopTimer();
+//     setTimeLeft(initialTime);
+//     startTimeRef.current = 0;
+//     pausedTimeRef.current = 0;
+//   };
 
-export default MillisecondTimer;
+//   return (
+//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//       <Text style={{ fontSize: 48 }}>
+//         {timeLeft.toFixed(2)}초
+//       </Text>
+//       <View style={{ flexDirection: 'row', marginTop: 20, gap: 10 }}>
+//         <Button 
+//           title="시작" 
+//           onPress={startTimer} 
+//           disabled={isRunning || timeLeft === 0} 
+//         />
+//         <Button 
+//           title="정지" 
+//           onPress={stopTimer} 
+//           disabled={!isRunning} 
+//         />
+//         <Button 
+//           title="리셋" 
+//           onPress={resetTimer} 
+//         />
+//       </View>
+//     </View>
+//   );
+// };
+
+// export default Timer;

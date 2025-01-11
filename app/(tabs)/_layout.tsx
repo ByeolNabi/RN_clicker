@@ -6,7 +6,7 @@ import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
     return (
-        <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+        <Tabs screenOptions={{ tabBarActiveTintColor: 'blue', animation: 'shift' }}>
             <Tabs.Screen
                 name="index"
                 options={{
@@ -14,20 +14,20 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <FontAwesome size={28} name="gamepad" color={color} />,
                 }}
             />
-            <Tabs.Screen
+            {/* <Tabs.Screen
                 name="ranking"
                 options={{
                     title: 'Ranking',
-                    tabBarIcon: ({ color }) => <FontAwesome6 name="ranking-star" size={24} color="black" />,
+                    tabBarIcon: ({ color }) => <FontAwesome6 name="ranking-star" size={24} color={color} />,
                 }}
             />
             <Tabs.Screen
                 name="timer"
                 options={{
                     title: 'Timer',
-                    tabBarIcon: ({ color }) => <Ionicons name="timer" size={24} color="black" />,
+                    tabBarIcon: ({ color }) => <Ionicons name="timer" size={24} color={color} />,
                 }}
-            />
+            /> */}
         </Tabs>
     );
 }
