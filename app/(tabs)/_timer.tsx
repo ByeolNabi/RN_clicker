@@ -65,7 +65,7 @@ const Timer = forwardRef(({ initialTime = 5.00 }: TimerProps, ref) => {
         pausedTimeRef.current = 0;
     };
 
-    useImperativeHandle(ref, () => ({ startTimer })); // 이 함수를 부모에게 ref를 통해서 올려보낸다.
+    useImperativeHandle(ref, () => ({ startTimer, getIsRunning: () => { return isRunning },getTimeLeft: () => { return timeLeft } })); // 이 함수를 부모에게 ref를 통해서 올려보낸다.
 
     return (
         <View style={styles.halfContainer}>
