@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { Tabs } from 'expo-router';
 
@@ -14,7 +14,7 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <FontAwesome size={28} name="gamepad" color={color} />,
                 }}
             />
-            {/* <Tabs.Screen
+            <Tabs.Screen
                 name="ranking"
                 options={{
                     title: 'Ranking',
@@ -22,12 +22,12 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="timer"
+                name="freezer"
                 options={{
-                    title: 'Timer',
-                    tabBarIcon: ({ color }) => <Ionicons name="timer" size={24} color={color} />,
+                    title: 'Freezer',
+                    tabBarIcon: ({ color }) => <FontAwesome5 name="stopwatch" size={24} color={color} />,
                 }}
-            /> */}
+            />
         </Tabs>
     );
 }

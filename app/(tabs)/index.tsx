@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
-import Timer from './_timer';
+import Timer from '../components/timer';
 
 const ClickButton: React.FC<{ onStart: () => void, isRunning: () => boolean, isTimeLeft: () => number }> = ({ onStart, isRunning, isTimeLeft }) => {
     const [count, setCount] = useState<number>(0)
