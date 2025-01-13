@@ -18,7 +18,7 @@ const ClickButton: React.FC<{ onStart: () => void, isRunning: () => boolean, isT
     // 랭킹 데이터 로드
     const loadRankingData = async () => {
         try {
-            const storedData = await AsyncStorage.getItem('rankingList');
+            const storedData = await AsyncStorage.getItem('clickerRanking');
             if (storedData) {
                 const parsedData: Ranking[] = JSON.parse(storedData);
                 setRankingList(parsedData);
@@ -36,7 +36,7 @@ const ClickButton: React.FC<{ onStart: () => void, isRunning: () => boolean, isT
             console.log(updatedList)
             updatedList.sort((a, b) => b.score - a.score);  // score 기준 내림차순 정렬
             const top10 = updatedList.slice(0, 10);  // 1위에서 10위까지
-            await AsyncStorage.setItem('rankingList', JSON.stringify(top10));
+            await AsyncStorage.setItem('clickerRanking', JSON.stringify(top10));
             rankingEventEmitter.emit('updateRanking')
             setRankingList(top10);
             

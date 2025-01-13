@@ -29,7 +29,7 @@ const Ranking: React.FC = () => {
   // 랭킹 데이터 로드
   const loadRankingData = async () => {
     try {
-      const storedData = await AsyncStorage.getItem('rankingList');
+      const storedData = await AsyncStorage.getItem('clickerRanking');
       if (storedData) {
         const parsedData: Ranking[] = JSON.parse(storedData);
         setRankingList(parsedData);

@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
-interface TimerProps {}
+interface TimerProps { }
 
 const Freezer: React.FC<TimerProps> = () => {
   const [timeElapsed, setTimeElapsed] = useState<number>(0); // 경과 시간
   const [isRunning, setIsRunning] = useState<boolean>(false); // 실행 상태
   const startTimeRef = useRef<number>(0); // 타이머 시작 시간
   const frameRef = useRef<number>(); // requestAnimationFrame ID
+
+  const [buttonType, setButtonType] = useState<number>(0); // 버튼 바뀌기
 
   useEffect(() => {
     if (isRunning) {
@@ -51,28 +53,64 @@ const Freezer: React.FC<TimerProps> = () => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 48 }}>
-        {timeElapsed.toFixed(2)}초 {/* 소수점 2자리까지 표시 */}
-      </Text>
-      <View style={{ flexDirection: 'row', marginTop: 20, gap: 10 }}>
-        <Button 
-          title="시작" 
-          onPress={startTimer} 
-          disabled={isRunning} 
-        />
-        <Button 
-          title="정지" 
-          onPress={stopTimer} 
-          disabled={!isRunning} 
-        />
-        <Button 
-          title="리셋" 
-          onPress={resetTimer} 
-        />
+    <View style={[styles.container]}>{/* 최상단 묶음 */}
+      <View style={styles.halfContainer}>{/* 상단 묶음 */}
+        <Text style={{ fontSize: 48 }}>
+          {timeElapsed.toFixed(2)}초 {/* 소수점 2자리까지 표시 */}
+        </Text>
+      </View>
+      <View style={styles.halfContainer}>{/* 하단 묶음 */}
+        <View style={styles.halfContainer}>{/* 버튼 묶음 */}
+          {
+            buttonType == 1
+              ? <Button
+                title="시작"
+                onPress={() => { startTimer; setButtonType(crt => (crt + 1) % 3); }}
+                disabled={isRunning}
+              />
+              : buttonType == 2
+                ? <Button
+                  title="정지"
+                  onPress={() => { stopTimer; setButtonType(crt => (crt + 1) % 3); }}
+                  disabled={!isRunning}
+                />
+                : <Button
+                  title="리셋"
+                  onPress={() => { resetTimer; setButtonType(crt => (crt + 1) % 3); }}
+                />
+          }
+        </View>
       </View>
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  halfContainer: {
+    flex: 1,
+    width: "100%",
+    borderWidth: 1,
+    borderColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textContainer: {
+    flex: 1,
+    width: "100%",
+    borderWidth: 1,
+    borderColor: 'black',
+  }
+});
+
 export default Freezer;
+
+// 3초에 시간 맞추기
+// 3초 뺴기 걸린 시간
+// 시작 -> 정지 -> 저장 팝업 -> 다시하기(값 초기화) -> 시작
