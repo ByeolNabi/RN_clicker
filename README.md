@@ -1,50 +1,14 @@
-# Welcome to your Expo app 👋
+# 사건사고
+### 데이터 보내기
+시간초와 버튼 클릭하는 엘리멘트를 따로 만들었더니 데이터를 부모를 거쳐 옆으로 보내야하는 상황이 생겼다.   
+-> forwardRef() useImperativeHandle()를 이용해서 해결했다.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+### 핸드폰에 데이터 저장하기
+AsyncStorage를 사용하면 핸드폰에 데이터를 저장할 수 있다. 그런데 AsyncStorage에 데이터가 업데이트 되었다는 것은 어떻게 확인하지?
+-> 저장을 하는 함수와 이벤트 발생시키는 함수를 사용해서 저장되었단는 것을 알리라고 한다.   
+```
+const eventer = new EventEmitter();
+eventer.emit('이벤트 고유 이름');  //이벤트 발생
+eventer.on('이벤트 고유 이름',실행할 함수);
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.

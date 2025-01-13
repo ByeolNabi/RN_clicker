@@ -1,10 +1,49 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 import Timer from '../components/timer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { rankingEventEmitter } from '../components/rankingEventEmitter';
+
+type Ranking = {
+    gameType: number;
+    score: number;
+    timestamp: number;  // 마지막 업데이트 시간
+};
 
 const ClickButton: React.FC<{ onStart: () => void, isRunning: () => boolean, isTimeLeft: () => number }> = ({ onStart, isRunning, isTimeLeft }) => {
     const [count, setCount] = useState<number>(0)
     const [score, setScore] = useState<number>(0)
+    const [rankingList, setRankingList] = useState<Ranking[]>([]);
+
+    // 랭킹 데이터 로드
+    const loadRankingData = async () => {
+        try {
+            const storedData = await AsyncStorage.getItem('rankingList');
+            if (storedData) {
+                const parsedData: Ranking[] = JSON.parse(storedData);
+                setRankingList(parsedData);
+            }
+        } catch (error) {
+            console.error('Error loading ranking data:', error);
+        }
+    };
+
+    // 랭킹 데이터 저장
+    const saveRankingData = async (newRanking: Ranking) => {
+        try {
+            console.log(rankingList)
+            const updatedList = [...rankingList, newRanking];
+            console.log(updatedList)
+            updatedList.sort((a, b) => b.score - a.score);  // score 기준 내림차순 정렬
+            const top10 = updatedList.slice(0, 10);  // 1위에서 10위까지
+            await AsyncStorage.setItem('rankingList', JSON.stringify(top10));
+            rankingEventEmitter.emit('updateRanking')
+            setRankingList(top10);
+            
+        } catch (error) {
+            console.error('Error saving ranking data:', error);
+        }
+    };
 
     const Clicked = () => {
         if (isTimeLeft() != 0) {
@@ -19,7 +58,7 @@ const ClickButton: React.FC<{ onStart: () => void, isRunning: () => boolean, isT
                 `저장하시겠습니까?`,
                 [
                     { text: "취소", onPress: () => { console.log("취소"); setCount(0); } },
-                    { text: "저장", onPress: () => { console.log("저장"); setCount(0); } }
+                    { text: "저장", onPress: () => { console.log("저장"); loadRankingData(); saveRankingData({gameType : 0, score: count, timestamp:Date.now()}); setCount(0); } }
                 ]
             )
         }
