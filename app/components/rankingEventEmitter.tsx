@@ -1,3 +1,5 @@
 import { EventEmitter } from 'events';
 
-export const rankingEventEmitter = new EventEmitter();
+const rankingEventEmitter = new EventEmitter();
+
+export default rankingEventEmitter;

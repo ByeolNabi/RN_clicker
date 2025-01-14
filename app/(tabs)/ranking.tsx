@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { rankingEventEmitter } from '../components/rankingEventEmitter';
+import rankingEventEmitter from '../components/rankingEventEmitter';
 
 type Ranking = {
   gameType: number;

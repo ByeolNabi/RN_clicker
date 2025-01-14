@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 
 interface TimerProps { }
 
@@ -60,24 +60,31 @@ const Freezer: React.FC<TimerProps> = () => {
         </Text>
       </View>
       <View style={styles.halfContainer}>{/* 하단 묶음 */}
-        <View style={styles.halfContainer}>{/* 버튼 묶음 */}
+        <View style={styles.button}>{/* 버튼 묶음 */}
           {
             buttonType == 1
-              ? <Button
-                title="시작"
-                onPress={() => { startTimer; setButtonType(crt => (crt + 1) % 3); }}
-                disabled={isRunning}
-              />
+              ? <TouchableOpacity style={styles.halfContainer} onPress={() => { startTimer; setButtonType(crt => (crt + 1) % 3); }}>
+                <View>{/* 추가적인 스타일링을 위한 View */}
+                  <Text>
+                    시작
+                  </Text>
+                </View>
+              </TouchableOpacity>
               : buttonType == 2
-                ? <Button
-                  title="정지"
-                  onPress={() => { stopTimer; setButtonType(crt => (crt + 1) % 3); }}
-                  disabled={!isRunning}
-                />
-                : <Button
-                  title="리셋"
-                  onPress={() => { resetTimer; setButtonType(crt => (crt + 1) % 3); }}
-                />
+                ? <TouchableOpacity style={styles.halfContainer} onPress={() => { startTimer; setButtonType(crt => (crt + 1) % 3); }}>
+                  <View>{/* 추가적인 스타일링을 위한 View */}
+                    <Text>
+                      정지
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                : <TouchableOpacity style={styles.halfContainer} onPress={() => { startTimer; setButtonType(crt => (crt + 1) % 3); }}>
+                  <View>{/* 추가적인 스타일링을 위한 View */}
+                    <Text>
+                      리셋
+                    </Text>
+                  </View>
+                </TouchableOpacity>
           }
         </View>
       </View>
@@ -101,12 +108,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  button: {
+    width: '50%',
+    height: '50%',
+    backgroundColor: 'skyblue',
+  },
   textContainer: {
     flex: 1,
     width: "100%",
     borderWidth: 1,
     borderColor: 'black',
-  }
+  },
 });
 
 export default Freezer;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 import Timer from '../components/timer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { rankingEventEmitter } from '../components/rankingEventEmitter';
+import rankingEventEmitter from '../components/rankingEventEmitter';
 
 type Ranking = {
     gameType: number;
@@ -39,7 +39,7 @@ const ClickButton: React.FC<{ onStart: () => void, isRunning: () => boolean, isT
             await AsyncStorage.setItem('clickerRanking', JSON.stringify(top10));
             rankingEventEmitter.emit('updateRanking')
             setRankingList(top10);
-            
+
         } catch (error) {
             console.error('Error saving ranking data:', error);
         }
@@ -58,7 +58,7 @@ const ClickButton: React.FC<{ onStart: () => void, isRunning: () => boolean, isT
                 `저장하시겠습니까?`,
                 [
                     { text: "취소", onPress: () => { console.log("취소"); setCount(0); } },
-                    { text: "저장", onPress: () => { console.log("저장"); loadRankingData(); saveRankingData({gameType : 0, score: count, timestamp:Date.now()}); setCount(0); } }
+                    { text: "저장", onPress: () => { console.log("저장"); loadRankingData(); saveRankingData({ gameType: 0, score: count, timestamp: Date.now() }); setCount(0); } }
                 ]
             )
         }

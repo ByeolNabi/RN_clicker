@@ -5,7 +5,7 @@ interface TimerProps {
     initialTime?: number;
 }
 
-const Timer = forwardRef(({ initialTime = 5.00 }: TimerProps, ref) => {
+const Timer = forwardRef(({ initialTime = 3.00 }: TimerProps, ref) => {
     const [timeLeft, setTimeLeft] = useState<number>(initialTime);
     const [isRunning, setIsRunning] = useState<boolean>(false);
     const startTimeRef = useRef<number>(0);
