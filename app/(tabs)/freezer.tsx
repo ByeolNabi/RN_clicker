@@ -1,7 +1,15 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import rankingEventEmitter from '../components/rankingEventEmitter';
 
 interface TimerProps { }
+
+type Ranking = {
+  gameType: number;
+  score: number;
+  timestamp: number;  // 마지막 업데이트 시간
+};
 
 const Freezer: React.FC<TimerProps> = () => {
   const [timeElapsed, setTimeElapsed] = useState<number>(0); // 경과 시간
@@ -10,6 +18,39 @@ const Freezer: React.FC<TimerProps> = () => {
   const frameRef = useRef<number>(); // requestAnimationFrame ID
 
   const [buttonType, setButtonType] = useState<number>(0); // 버튼 바뀌기
+
+  const [rankingList, setRankingList] = useState<Ranking[]>([]);
+
+
+  // 랭킹 데이터 로드
+  const loadRankingData = async () => {
+    try {
+      const storedData = await AsyncStorage.getItem('freezerRanking');
+      if (storedData) {
+        const parsedData: Ranking[] = JSON.parse(storedData);
+        setRankingList(parsedData);
+      }
+    } catch (error) {
+      console.error('Error loading ranking data:', error);
+    }
+  };
+
+  // 랭킹 데이터 저장
+  const saveRankingData = async (newRanking: Ranking) => {
+    try {
+      console.log(rankingList)
+      const updatedList = [...rankingList, newRanking];
+      console.log(updatedList)
+      updatedList.sort((a, b) => b.score - a.score);  // score 기준 내림차순 정렬
+      const top10 = updatedList.slice(0, 10);  // 1위에서 10위까지
+      await AsyncStorage.setItem('freezerRanking', JSON.stringify(top10));
+      rankingEventEmitter.emit('updateRanking')
+      setRankingList(top10);
+
+    } catch (error) {
+      console.error('Error saving ranking data:', error);
+    }
+  };
 
   useEffect(() => {
     if (isRunning) {
@@ -37,6 +78,7 @@ const Freezer: React.FC<TimerProps> = () => {
     if (!isRunning) {
       setIsRunning(true);
     }
+
   };
 
   const stopTimer = (): void => {
@@ -44,6 +86,7 @@ const Freezer: React.FC<TimerProps> = () => {
     if (frameRef.current) {
       cancelAnimationFrame(frameRef.current); // requestAnimationFrame 중단
     }
+
   };
 
   const resetTimer = (): void => {
@@ -62,23 +105,40 @@ const Freezer: React.FC<TimerProps> = () => {
       <View style={styles.halfContainer}>{/* 하단 묶음 */}
         <View style={styles.button}>{/* 버튼 묶음 */}
           {
-            buttonType == 1
-              ? <TouchableOpacity style={styles.halfContainer} onPress={() => { startTimer; setButtonType(crt => (crt + 1) % 3); }}>
+            buttonType == 0
+              ? <TouchableOpacity style={styles.halfContainer} onPress={() => {
+                startTimer();
+                setButtonType(crt => (crt + 1) % 3);
+              }}>
                 <View>{/* 추가적인 스타일링을 위한 View */}
                   <Text>
                     시작
                   </Text>
                 </View>
               </TouchableOpacity>
-              : buttonType == 2
-                ? <TouchableOpacity style={styles.halfContainer} onPress={() => { startTimer; setButtonType(crt => (crt + 1) % 3); }}>
+              : buttonType == 1
+                ? <TouchableOpacity style={styles.halfContainer} onPress={() => {
+                  stopTimer();
+                  setButtonType(crt => (crt + 1) % 3);
+                  Alert.alert(
+                    `오차 {}초 입니다.`,
+                    `저장하시겠습니까?`,
+                    [
+                      { text: "취소", onPress: () => { console.log("취소"); } },
+                      { text: "저장", onPress: () => { console.log("저장"); loadRankingData(); saveRankingData({ gameType: 1, score: 1, timestamp: Date.now() }); } }
+                    ]
+                  );
+                }}>
                   <View>{/* 추가적인 스타일링을 위한 View */}
                     <Text>
                       정지
                     </Text>
                   </View>
                 </TouchableOpacity>
-                : <TouchableOpacity style={styles.halfContainer} onPress={() => { startTimer; setButtonType(crt => (crt + 1) % 3); }}>
+                : <TouchableOpacity style={styles.halfContainer} onPress={() => {
+                  resetTimer();
+                  setButtonType(crt => (crt + 1) % 3);
+                }}>
                   <View>{/* 추가적인 스타일링을 위한 View */}
                     <Text>
                       리셋

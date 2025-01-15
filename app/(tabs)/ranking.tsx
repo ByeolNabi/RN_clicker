@@ -10,7 +10,8 @@ type Ranking = {
 };
 
 const Ranking: React.FC = () => {
-  const [rankingList, setRankingList] = useState<Ranking[]>([]);
+  const [clikerRankingList, setClikerRankingList] = useState<Ranking[]>([]);
+  const [freezerRankingList, setFreezerRankingList] = useState<Ranking[]>([]);
 
   useEffect(() => {
     loadRankingData();
@@ -32,7 +33,16 @@ const Ranking: React.FC = () => {
       const storedData = await AsyncStorage.getItem('clickerRanking');
       if (storedData) {
         const parsedData: Ranking[] = JSON.parse(storedData);
-        setRankingList(parsedData);
+        setClikerRankingList(parsedData);
+      }
+    } catch (error) {
+      console.error('Error loading ranking data:', error);
+    }
+    try {
+      const storedData = await AsyncStorage.getItem('freezerRanking');
+      if (storedData) {
+        const parsedData: Ranking[] = JSON.parse(storedData);
+        setFreezerRankingList(parsedData);
       }
     } catch (error) {
       console.error('Error loading ranking data:', error);
@@ -45,7 +55,7 @@ const Ranking: React.FC = () => {
     <View style={styles.container}>
       <View style={styles.halfContainer}><Text>Clicker Ranking</Text>
         <FlatList
-          data={rankingList}
+          data={clikerRankingList}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
             <View style={{ padding: 10 }}>
@@ -53,7 +63,16 @@ const Ranking: React.FC = () => {
             </View>
           )}
         /></View>
-      <View style={styles.halfContainer}><Text>Freezer Ranking</Text><Text style={styles.textContainer}>rank data</Text></View>
+      <View style={styles.halfContainer}><Text>Freezer Ranking</Text>
+      <FlatList
+          data={freezerRankingList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <View style={{ padding: 10 }}>
+              <Text>{`[${index + 1}] ${item.score} points`}</Text>
+            </View>
+          )}
+        /><Text style={styles.textContainer}>rank data</Text></View>
     </View>
   );
 }
