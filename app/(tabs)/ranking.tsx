@@ -53,25 +53,25 @@ const Ranking: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.halfContainer}><Text>Clicker Ranking</Text>
+      <View style={styles.halfContainer}>
+        <Text style={styles.titleText}>Clicker Ranking</Text>
         <FlatList
-          style={styles.textContainer}
           data={clikerRankingList}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
-            <View style={{ padding: 10 }}>
-              <Text>{`[${index + 1}] ${item.score} points`}</Text>
+            <View style={styles.rankingItem}>
+              <Text style={styles.rankingText}>{`[${index + 1}] ${item.score} points`}</Text>
             </View>
           )}
         /></View>
-      <View style={styles.halfContainer}><Text>Freezer Ranking</Text>
+      <View style={styles.halfContainer}>
+        <Text style={styles.titleText}>Freezer Ranking</Text>
         <FlatList
-          style={styles.textContainer}
           data={freezerRankingList}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
-            <View style={{ padding: 10 }}>
-              <Text>{`[${index + 1}] ${item.score} points`}</Text>
+            <View style={styles.rankingItem}>
+              <Text style={styles.rankingText}>{`[${index + 1}] ${item.score} points`}</Text>
             </View>
           )}
         /></View>
@@ -81,25 +81,37 @@ const Ranking: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'black',
+    flexDirection: 'row', // 가로로 나란히 배치
+    backgroundColor: '#FAFAFA',
+    paddingTop: 24,
   },
   halfContainer: {
     flex: 1,
-    width: "100%",
-    borderWidth: 1,
-    borderColor: 'black',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
-  textContainer: {
-    flex: 1,
-    width: "100%",
-    borderWidth: 1,
-    borderColor: 'black',
-  }
+  titleText: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  rankingItem: {
+    backgroundColor: '#FFFFFF',
+    marginVertical: 4,
+    borderRadius: 8,
+    padding: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 4,
+    elevation: 2,
+    width: '100%',
+  },
+  rankingText: {
+    fontSize: 16,
+    fontWeight: '400',
+  },
 });
 
 export default Ranking;
