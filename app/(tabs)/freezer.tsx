@@ -41,7 +41,7 @@ const Freezer: React.FC<TimerProps> = () => {
       console.log(rankingList)
       const updatedList = [...rankingList, newRanking];
       console.log(updatedList)
-      updatedList.sort((a, b) => a.score - b.score);  // score 기준 내림차순 정렬
+      updatedList.sort((a, b) => Math.abs(a.score) - Math.abs(b.score));  // score 기준 내림차순 정렬
       const top10 = updatedList.slice(0, 10);  // 1위에서 10위까지
       await AsyncStorage.setItem('freezerRanking', JSON.stringify(top10));
       rankingEventEmitter.emit('updateRanking')
@@ -82,10 +82,10 @@ const Freezer: React.FC<TimerProps> = () => {
   };
 
   const stopTimer = (): void => {
+    setIsRunning(false);
     if (frameRef.current) {
       cancelAnimationFrame(frameRef.current); // requestAnimationFrame 중단
     }
-    setIsRunning(false);
 
   };
 
@@ -120,12 +120,16 @@ const Freezer: React.FC<TimerProps> = () => {
                 ? <TouchableOpacity style={styles.halfContainer} onPress={() => {
                   stopTimer();
                   setButtonType(crt => (crt + 1) % 3);
+                  const currentTime = performance.now();
+                  const elapsed = (currentTime - startTimeRef.current) / 1000; // 현재 시간 계산
+
+
                   Alert.alert(
-                    `${timeElapsed.toFixed(2)}오차 ${(timeElapsed - 1).toFixed(2)}초 입니다.`,
+                    `${elapsed.toFixed(2)}오차 ${(elapsed - 1).toFixed(2)}초 입니다.`,
                     `저장하시겠습니까?`,
                     [
                       { text: "취소", onPress: () => { console.log("취소"); } },
-                      { text: "저장", onPress: () => { console.log("저장"); loadRankingData(); saveRankingData({ gameType: 1, score: (timeElapsed - 1), timestamp: Date.now() }); } }
+                      { text: "저장", onPress: () => { console.log("저장"); loadRankingData(); saveRankingData({ gameType: 1, score: parseFloat((elapsed - 1).toFixed(2)), timestamp: Date.now() }); } }
                     ]
                   );
                 }}>

@@ -55,6 +55,7 @@ const Ranking: React.FC = () => {
     <View style={styles.container}>
       <View style={styles.halfContainer}><Text>Clicker Ranking</Text>
         <FlatList
+          style={styles.textContainer}
           data={clikerRankingList}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
@@ -64,7 +65,8 @@ const Ranking: React.FC = () => {
           )}
         /></View>
       <View style={styles.halfContainer}><Text>Freezer Ranking</Text>
-      <FlatList
+        <FlatList
+          style={styles.textContainer}
           data={freezerRankingList}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
@@ -72,7 +74,7 @@ const Ranking: React.FC = () => {
               <Text>{`[${index + 1}] ${item.score} points`}</Text>
             </View>
           )}
-        /><Text style={styles.textContainer}>rank data</Text></View>
+        /></View>
     </View>
   );
 }
